@@ -1,0 +1,12 @@
+services:
+  mongodb-data:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    env_file:
+      - ./src/env/db.env
+    volumes:
+      - jobs_api:/data/db
+
+volumes:
+  jobs_api:
