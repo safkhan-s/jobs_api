@@ -4,7 +4,7 @@ const http = require("http");
 const expressApp = require("./express");
 const connectDb = require("./db/connect-db");
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 6000;
 const dbUrl = process.env.dbUrl;
 const dbUser = process.env.dbUser;
 const dbPassword = process.env.dbPassword;
