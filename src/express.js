@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   res.status(200).json({ status: "success" });
 });
 
-app.use("/api/v1/users", authRoutes);
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/jobs", jobsRoutes);
 
 app.use(pageNotFound);
