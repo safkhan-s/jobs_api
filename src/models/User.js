@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-const passCrypt = require("../helpers/password-crypt");
+const jwt = require("jsonwebtoken");
+const passCrypt = require("../auth/password-crypt");
 
 const UserSchema = mongoose.Schema({
   username: {
@@ -26,5 +27,11 @@ const UserSchema = mongoose.Schema({
 UserSchema.pre("save", async function (next) {
   this.password = await passCrypt(this.password);
 });
+
+UserSchema.methods.createJWT = function () {
+  return jwt.sign({ userId: this._id, username: this.username }, "JWT_SECRET", {
+    expiresIn: "30d",
+  });
+};
 
 module.exports = mongoose.model("User", UserSchema);
