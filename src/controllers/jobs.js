@@ -1,5 +1,16 @@
+const { StatusCodes } = require("http-status-codes");
+
+const Job = require("../models/Job");
+const { BadRequestError, UnauthentucatedError } = require("../errors");
+
 const getAllJobs = async (req, res, next) => {
-  res.send("all jobs");
+  const userId = req.user.userId;
+  if (userId) {
+    throw new UnauthentucatedError("Invalid Credentials!");
+  }
+  const userJobs = await Job.find({ createdBy: userId });
+
+  res.status(StatusCodes.OK).json({ status: "success", data: { userJobs } });
 };
 
 const getJob = async (req, res, next) => {
@@ -7,7 +18,12 @@ const getJob = async (req, res, next) => {
 };
 
 const createJob = async (req, res, next) => {
-  res.json(req.user);
+  req.body.createdBy = req.user.userId;
+  if (!req.user.userId) {
+    throw new UnauthentucatedError("Invalid Credentials!");
+  }
+  const job = await Job.create(req.body);
+  res.status(StatusCodes.CREATED).json({ status: "success", data: { job } });
 };
 
 const updateJob = async (req, res, next) => {
