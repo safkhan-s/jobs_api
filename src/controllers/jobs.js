@@ -5,12 +5,14 @@ const { BadRequestError, UnauthentucatedError } = require("../errors");
 
 const getAllJobs = async (req, res, next) => {
   const userId = req.user.userId;
-  if (userId) {
+  if (!userId) {
     throw new UnauthentucatedError("Invalid Credentials!");
   }
-  const userJobs = await Job.find({ createdBy: userId });
+  const userJobs = await Job.find({ createdBy: userId }).sort("createdAt");
 
-  res.status(StatusCodes.OK).json({ status: "success", data: { userJobs } });
+  res
+    .status(StatusCodes.OK)
+    .json({ status: "success", data: { count: userJobs.length, userJobs } });
 };
 
 const getJob = async (req, res, next) => {
