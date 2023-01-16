@@ -16,7 +16,16 @@ const getAllJobs = async (req, res, next) => {
 };
 
 const getJob = async (req, res, next) => {
-  res.send("one job");
+  const userId = req.user.userId;
+  const job = req.params.id;
+  if (!userId) {
+    throw new UnauthentucatedError("Invalid Credentials!");
+  }
+  const userJob = await Job.find({ _id: job });
+  if (!userJob) {
+    throw new BadRequestError(`Job not found!id:${job}`);
+  }
+  res.status(StatusCodes.OK).json({ status: "success", data: { userJob } });
 };
 
 const createJob = async (req, res, next) => {
