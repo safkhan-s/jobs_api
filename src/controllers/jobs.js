@@ -17,13 +17,13 @@ const getAllJobs = async (req, res, next) => {
 
 const getJob = async (req, res, next) => {
   const userId = req.user.userId;
-  const job = req.params.id;
+  const jobId = req.params.id;
   if (!userId) {
     throw new UnauthentucatedError("Invalid Credentials!");
   }
-  const userJob = await Job.find({ _id: job });
+  const userJob = await Job.find({ _id: jobId });
   if (!userJob) {
-    throw new BadRequestError(`Job not found!id:${job}`);
+    throw new BadRequestError(`Job not found!id:${jobId}`);
   }
   res.status(StatusCodes.OK).json({ status: "success", data: { userJob } });
 };
